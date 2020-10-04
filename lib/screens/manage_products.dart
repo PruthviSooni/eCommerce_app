@@ -1,6 +1,7 @@
 import 'package:ecommerce_app/provider/products.dart';
 import 'package:ecommerce_app/screens/add_product.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:provider/provider.dart';
 import '../widgets/manage_products_items.dart';
 
@@ -23,12 +24,21 @@ class ManageProductScreen extends StatelessWidget {
       ),
       body: Consumer<Products>(
         builder: (_, product, __) {
-          return ListView.builder(
-            itemCount: product.items.length,
-            itemBuilder: (context, index) => ManageProductItems(
-              id: product.items[index].id,
-              title: product.items[index].title,
-              imgUrl: product.items[index].imageUrl,
+          return AnimationLimiter(
+            child: ListView.builder(
+              itemCount: product.items.length,
+              itemBuilder: (context, index) =>
+                  AnimationConfiguration.staggeredList(
+                position: index,
+                child: FadeInAnimation(
+                  duration: Duration(milliseconds: 500),
+                  child: ManageProductItems(
+                    id: product.items[index].id,
+                    title: product.items[index].title,
+                    imgUrl: product.items[index].imageUrl,
+                  ),
+                ),
+              ),
             ),
           );
         },

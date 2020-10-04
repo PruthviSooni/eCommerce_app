@@ -1,12 +1,10 @@
-import 'dart:io';
-
-import 'package:ecommerce_app/provider/product.dart';
-import 'package:ecommerce_app/provider/products.dart';
-import 'package:ecommerce_app/utils/constants.dart';
+import '../provider/products.dart';
+import '../provider/product.dart';
+import '../utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
+import 'package:validators/validators.dart';
 
 class AddProductScreen extends StatefulWidget {
   static const String routeName = 'AddProductScreen';
@@ -16,12 +14,12 @@ class AddProductScreen extends StatefulWidget {
 }
 
 class _AddProductScreenState extends State<AddProductScreen> {
-  File _image;
-  String imgPath;
-  final picker = ImagePicker();
   final _formKey = GlobalKey<FormState>();
   final _key = GlobalKey<ScaffoldState>();
   final _imgUrlController = TextEditingController();
+  final _priceFocusNode = FocusNode();
+  String imgUrl = "";
+  final _descriptionFocusNode = FocusNode();
   var _isInit = true;
   var _initValues = {
     'title': "",
@@ -29,7 +27,6 @@ class _AddProductScreenState extends State<AddProductScreen> {
     'price': "",
     'imgUrl': "",
   };
-  PickedFile pickedFile;
   var _editingFields = Product(
     id: null,
     title: "",
@@ -37,23 +34,12 @@ class _AddProductScreenState extends State<AddProductScreen> {
     imageUrl: "",
     price: 0,
   );
-  Future getImage() async {
-    pickedFile = await picker.getImage(source: ImageSource.camera);
-    setState(() {
-      if (pickedFile != null) {
-        _image = File(pickedFile.path);
-        print(_image.path);
-        _imgUrlController.text = _image.path;
-      } else {
-        print('No image selected.');
-      }
-    });
-  }
 
   @override
   void dispose() {
     _priceFocusNode.dispose();
     _descriptionFocusNode.dispose();
+    _imgUrlController.dispose();
     super.dispose();
   }
 
@@ -63,7 +49,12 @@ class _AddProductScreenState extends State<AddProductScreen> {
       return;
     }
     _formKey.currentState.save();
-    Provider.of<Products>(context, listen: false).addProduct(_editingFields);
+    if (_editingFields.id != null) {
+      Provider.of<Products>(context, listen: false)
+          .updateProduct(_editingFields.id, _editingFields);
+    } else {
+      Provider.of<Products>(context, listen: false).addProduct(_editingFields);
+    }
     Navigator.pop(context);
   }
 
@@ -80,16 +71,12 @@ class _AddProductScreenState extends State<AddProductScreen> {
           'price': _editingFields.price.toString(),
           'imgUrl': "",
         };
-        _imgUrlController.text = _initValues['imgUrl'];
+        _imgUrlController.text = _editingFields.imageUrl;
       }
     }
     _isInit = false;
     super.didChangeDependencies();
   }
-
-  final _priceFocusNode = FocusNode();
-
-  final _descriptionFocusNode = FocusNode();
 
   @override
   Widget build(BuildContext context) {
@@ -101,15 +88,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
           IconButton(
             icon: Icon(Icons.save),
             onPressed: () {
-              if (_image == null) {
-                _key.currentState.showSnackBar(
-                  SnackBar(
-                    content: Text("Please provide image!"),
-                  ),
-                );
-              } else {
-                _saveForm();
-              }
+              _saveForm();
             },
           ),
         ],
@@ -137,6 +116,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                 description: _editingFields.description,
                 imageUrl: _editingFields.imageUrl,
                 price: _editingFields.price,
+                isFavorite: _editingFields.isFavorite,
               ),
             ),
             SizedBox(height: 8),
@@ -154,6 +134,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                 description: _editingFields.description,
                 imageUrl: _editingFields.imageUrl,
                 price: double.parse(newValue),
+                isFavorite: _editingFields.isFavorite,
               ),
               validator: (value) {
                 if (value.isEmpty) {
@@ -178,12 +159,13 @@ class _AddProductScreenState extends State<AddProductScreen> {
                   kTextFieldDecoration.copyWith(labelText: "Description"),
               focusNode: _descriptionFocusNode,
               onSaved: (newValue) => _editingFields = Product(
-                id: _editingFields.id,
-                title: _editingFields.title,
-                description: newValue,
-                imageUrl: _editingFields.imageUrl,
-                price: _editingFields.price,
-              ),
+                  id: _editingFields.id,
+                  title: _editingFields.title,
+                  description: newValue,
+                  imageUrl: _editingFields.imageUrl,
+                  price: _editingFields.price,
+                  isFavorite: _editingFields.isFavorite),
+              // ignore: missing_return
               validator: (value) {
                 if (value.isEmpty) {
                   return 'Please enter description!';
@@ -200,51 +182,59 @@ class _AddProductScreenState extends State<AddProductScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  InkWell(
-                    borderRadius: BorderRadius.circular(12),
-                    onTap: getImage,
-                    child: Container(
+                  Container(
                       height: 150,
                       width: 150,
                       decoration: BoxDecoration(
                         border: Border.all(
-                            color: _image == null
+                            color: imgUrl.isEmpty
                                 ? Colors.red.shade500
                                 : Colors.grey.shade500,
                             width: 1),
                         borderRadius: BorderRadius.circular(12),
                       ),
-                      child: _image == null
+                      child: imgUrl.isEmpty && _editingFields.imageUrl.isEmpty
                           ? Icon(
                               Icons.add_a_photo,
                             )
                           : ClipRRect(
                               borderRadius: BorderRadius.circular(12),
-                              child: Image.file(
-                                _image,
+                              child: Image.network(
+                                _imgUrlController.text,
                                 fit: BoxFit.cover,
                               ),
-                            ),
-                    ),
-                  ),
+                            )),
                   Container(
                     width: 230,
                     margin: EdgeInsets.only(bottom: 5),
                     child: TextFormField(
-                      controller: _imgUrlController,
-                      enabled: false,
-                      maxLines: _imgUrlController.text.length > 20 ? 4 : 1,
-                      textInputAction: TextInputAction.next,
-                      keyboardType: TextInputType.multiline,
-                      decoration: kTextFieldDecoration.copyWith(
-                          labelText: "Image Path"),
-                      onSaved: (newValue) => _editingFields = Product(
-                        imageUrl: newValue,
-                        title: _editingFields.title,
-                        description: _editingFields.description,
-                        price: _editingFields.price,
-                      ),
-                    ),
+                        controller: _imgUrlController,
+                        maxLines: _imgUrlController.text.length > 20 ? 4 : 1,
+                        textInputAction: TextInputAction.done,
+                        decoration: kTextFieldDecoration.copyWith(
+                            labelText: "Image Path"),
+                        validator: (value) {
+                          bool url = isURL(value);
+                          if (url == false) {
+                            return "Please enter valid url";
+                          } else {
+                            setState(() {
+                              imgUrl = value;
+                            });
+                          }
+                        },
+                        onEditingComplete: _saveForm,
+                        onSaved: (newValue) {
+                          print(newValue);
+                          _editingFields = Product(
+                            imageUrl: newValue,
+                            title: _editingFields.title,
+                            description: _editingFields.description,
+                            price: _editingFields.price,
+                            id: _editingFields.id,
+                            isFavorite: _editingFields.isFavorite,
+                          );
+                        }),
                   ),
                 ],
               ),

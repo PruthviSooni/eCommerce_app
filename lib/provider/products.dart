@@ -109,6 +109,17 @@ class Products with ChangeNotifier {
   }
 
   void updateProduct(String id, Product product) {
-    // var _items.indexWhere((element) => element.id == id);
+    var index = _items.indexWhere((element) => element.id == id);
+    if (index >= 0) {
+      _items[index] = product;
+      notifyListeners();
+    } else {
+      print('product is different');
+    }
+  }
+
+  void removeProduct(String id) {
+    _items.removeWhere((product) => product.id == id);
+    notifyListeners();
   }
 }

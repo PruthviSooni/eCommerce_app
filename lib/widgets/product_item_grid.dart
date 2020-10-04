@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -75,15 +73,11 @@ class ProductItemGrid extends StatelessWidget {
             },
             child: Hero(
               tag: product.hashCode,
-              child: product.imageUrl.startsWith('/storage/emulated')
-                  ? Image.file(
-                      File(product.imageUrl),
-                      fit: BoxFit.cover,
-                    )
-                  : Image.asset(
-                      product.imageUrl,
-                      fit: BoxFit.cover,
-                    ),
+              child: FadeInImage(
+                image: NetworkImage(product.imageUrl),
+                placeholder: AssetImage('images/placeholder.png'),
+                fit: BoxFit.cover,
+              ),
             ),
           ),
         ),

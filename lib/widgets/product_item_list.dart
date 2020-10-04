@@ -1,4 +1,4 @@
-import 'package:flutter/cupertino.dart';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -26,10 +26,13 @@ class ProductItemList extends StatelessWidget {
             borderRadius: BorderRadius.circular(12),
             child: Hero(
               tag: product.hashCode,
-              child: Image.asset(
+              child: Image.network(
                 product.imageUrl,
-                width: 90,
-                fit: BoxFit.fitWidth,
+                errorBuilder: (context, error, stackTrace) => Icon(
+                  Icons.image_not_supported,
+                  color: Colors.red,
+                ),
+                fit: BoxFit.cover,
               ),
             ),
           ),

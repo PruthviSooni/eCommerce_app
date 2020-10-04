@@ -48,7 +48,7 @@ class ProductDetailsScreen extends StatelessWidget {
               tag: loadedProduct.hashCode,
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(12),
-                child: Image.asset(
+                child: Image.network(
                   loadedProduct.imageUrl,
                 ),
               ),

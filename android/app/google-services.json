@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "130779562421",
+    "firebase_url": "https://ecommerceapp-9e37c.firebaseio.com",
+    "project_id": "ecommerceapp-9e37c",
+    "storage_bucket": "ecommerceapp-9e37c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:130779562421:android:5bc4cb337f21aa2febd9fc",
+        "android_client_info": {
+          "package_name": "com.techub.ecommerce_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "130779562421-crkutdsjd7eljblb7lub2jdrhhlvn0i5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCBgHCA5nni1v_eeme4MNxNEuJWQBdyfSQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "130779562421-crkutdsjd7eljblb7lub2jdrhhlvn0i5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

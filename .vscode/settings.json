@@ -8,5 +8,6 @@
         "ecommerce",
         "multiline",
         "vsync"
-    ]
+    ],
+    "editor.acceptSuggestionOnEnter": "smart"
 }

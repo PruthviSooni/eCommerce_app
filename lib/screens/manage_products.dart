@@ -7,9 +7,13 @@ import '../widgets/manage_products_items.dart';
 
 class ManageProductScreen extends StatelessWidget {
   static const String routeName = 'ManageProductsScreen';
+  GlobalKey<ScaffoldState> _key = GlobalKey<ScaffoldState>();
+
+  ManageProductScreen({Key key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _key,
       appBar: AppBar(
         title: Text("Manage Product's"),
         actions: [
@@ -22,26 +26,31 @@ class ManageProductScreen extends StatelessWidget {
           )
         ],
       ),
-      body: Consumer<Products>(
-        builder: (_, product, __) {
-          return AnimationLimiter(
-            child: ListView.builder(
-              itemCount: product.items.length,
-              itemBuilder: (context, index) =>
-                  AnimationConfiguration.staggeredList(
-                position: index,
-                child: FadeInAnimation(
-                  duration: Duration(milliseconds: 500),
-                  child: ManageProductItems(
-                    id: product.items[index].id,
-                    title: product.items[index].title,
-                    imgUrl: product.items[index].imageUrl,
+      body: RefreshIndicator(
+        onRefresh: () async {
+          await Provider.of<Products>(context, listen: false).fetchProducts();
+        },
+        child: Consumer<Products>(
+          builder: (_, product, __) {
+            return AnimationLimiter(
+              child: ListView.builder(
+                itemCount: product.items.length,
+                itemBuilder: (context, index) =>
+                    AnimationConfiguration.staggeredList(
+                  position: index,
+                  child: FadeInAnimation(
+                    duration: Duration(milliseconds: 500),
+                    child: ManageProductItems(
+                      id: product.items[index].id,
+                      title: product.items[index].title,
+                      imgUrl: product.items[index].imageUrl,
+                    ),
                   ),
                 ),
               ),
-            ),
-          );
-        },
+            );
+          },
+        ),
       ),
     );
   }

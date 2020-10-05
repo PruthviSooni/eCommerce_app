@@ -1,88 +1,15 @@
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-import '../utils/assests.dart';
 import 'product.dart';
+import 'package:http/http.dart' as http;
 
 class Products with ChangeNotifier {
-  List<Product> _items = [
-    Product(
-      id: "1",
-      title: "DSLR",
-      price: 39800,
-      imageUrl: Assets.image1,
-      description: Assets.ipsum,
-    ),
-    Product(
-      id: "2",
-      title: "Amazon Alexa",
-      price: 2890,
-      imageUrl: Assets.image2,
-      description: Assets.ipsum,
-    ),
-    Product(
-      id: "3",
-      title: "Face Wash",
-      price: 100,
-      imageUrl: Assets.image3,
-      description: Assets.ipsum,
-    ),
-    Product(
-      id: "4",
-      title: "Casual Shoes",
-      price: 2579,
-      imageUrl: Assets.image4,
-      description: Assets.ipsum,
-    ),
-    Product(
-      id: "5",
-      title: "Desk",
-      price: 15499,
-      imageUrl: Assets.image5,
-      description: Assets.ipsum,
-    ),
-    Product(
-      id: "6",
-      title: "Table",
-      price: 21450,
-      imageUrl: Assets.image6,
-      description: Assets.ipsum,
-    ),
-    Product(
-      id: "7",
-      title: "Air Pods 2",
-      price: 24999,
-      imageUrl: Assets.image7,
-      description: Assets.ipsum,
-    ),
-    Product(
-      id: "8",
-      title: "Nike Shoes",
-      price: 2499,
-      imageUrl: Assets.image8,
-      description: Assets.ipsum,
-    ),
-    Product(
-      id: "9",
-      title: "Product Red ",
-      price: 49999,
-      imageUrl: Assets.image9,
-      description: Assets.ipsum,
-    ),
-    Product(
-      id: "10",
-      title: "Power Bank",
-      price: 2000,
-      imageUrl: Assets.image10,
-      description: Assets.ipsum,
-    ),
-    Product(
-      id: "11",
-      title: "Snickers Shoes",
-      price: 3500,
-      imageUrl: Assets.image11,
-      description: Assets.ipsum,
-    ),
-  ];
+  List<Product> _items = [];
+  var _url = "https://ecommerceapp-9e37c.firebaseio.com/products.json";
 
   List<Product> get items {
     return [..._items];
@@ -96,22 +23,67 @@ class Products with ChangeNotifier {
     return _items.firstWhere((element) => element.id == id);
   }
 
-  void addProduct(Product product) {
-    var newProduct = Product(
-      id: DateTime.now().toString(),
-      title: product.title,
-      description: product.description,
-      price: product.price,
-      imageUrl: product.imageUrl,
-    );
-    _items.add(newProduct);
-    notifyListeners();
+  Future<void> fetchProducts() async {
+    try {
+      final res = await http.get(_url);
+      final data = json.decode(res.body) as Map<String, dynamic>;
+      final List<Product> loadedData = [];
+      data.forEach((productId, productData) {
+        loadedData.add(Product(
+          id: productId,
+          title: productData['title'] as String,
+          description: productData['description'],
+          price: productData['price'],
+          isFavorite: productData['isFavorite'],
+          imageUrl: productData['imgUrl'],
+        ));
+        _items = loadedData;
+        notifyListeners();
+      });
+    } on HttpException catch (e) {
+      print(e.message);
+    }
   }
 
-  void updateProduct(String id, Product product) {
+  Future<void> addProduct(Product product) async {
+    try {
+      final res = await http.post(
+        _url,
+        body: json.encode({
+          "title": product.title,
+          "description": product.description,
+          "price": product.price,
+          "imgUrl": product.imageUrl,
+          "isFavorite": product.isFavorite,
+        }),
+      );
+      print('Data added');
+      var newProduct = Product(
+        id: json.decode(res.body)['name'],
+        title: product.title,
+        description: product.description,
+        price: product.price,
+        imageUrl: product.imageUrl,
+      );
+      _items.add(newProduct);
+      notifyListeners();
+    } on FirebaseException catch (e) {
+      print(e.message);
+    }
+  }
+
+  Future<void> updateProduct(String id, Product newProduct) async {
     var index = _items.indexWhere((element) => element.id == id);
     if (index >= 0) {
-      _items[index] = product;
+      var _url = "https://ecommerceapp-9e37c.firebaseio.com/products/$id.json";
+      await http.patch(_url,
+          body: jsonEncode({
+            'title': newProduct.title,
+            'description': newProduct.description,
+            'price': newProduct.price,
+            'imgUrl': newProduct.imageUrl,
+          }));
+      _items[index] = newProduct;
       notifyListeners();
     } else {
       print('product is different');

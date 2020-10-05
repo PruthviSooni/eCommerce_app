@@ -12,71 +12,83 @@ class ProductItemGrid extends StatelessWidget {
   Widget build(BuildContext context) {
     var product = Provider.of<Product>(context);
     var cart = Provider.of<Cart>(context);
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(12),
-        child: GridTile(
-          header: Container(
-            alignment: Alignment.center,
-            width: MediaQuery.of(context).size.width,
-            height: 30,
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          PageRouteBuilder(
+              reverseTransitionDuration: Duration(milliseconds: 700),
+              transitionDuration: Duration(milliseconds: 700),
+              maintainState: true,
+              pageBuilder: (_, __, ___) => ProductDetailsScreen(
+                    id: product.id,
+                    tag: product.hashCode,
+                    title: product.title,
+                  )),
+        );
+      },
+      child: Hero(
+        tag: product.hashCode,
+        child: Material(
+          borderRadius: BorderRadius.circular(12),
+          child: Container(
             decoration: BoxDecoration(
-              color: Colors.black38,
+              borderRadius: BorderRadius.circular(12),
             ),
-            child: Text(
-              "${product.title}",
-              textAlign: TextAlign.center,
-              style: TextStyle(color: Colors.white),
-            ),
-          ),
-          footer: GridTileBar(
-            backgroundColor: Colors.black54,
-            leading: Text("₹${product.price}",
-                textAlign: TextAlign.center,
-                maxLines: 2,
-                style: TextStyle(color: Colors.white)),
-            trailing: IconButton(
-              icon: Icon(Icons.shopping_cart),
-              onPressed: () {
-                cart.addItem(product.id, product.title, product.price);
-                Scaffold.of(context).showSnackBar(SnackBar(
-                  action: SnackBarAction(
-                    onPressed: () {
-                      Navigator.of(context).pushNamed(ShoppingCart.routeName);
-                    },
-                    label: "Cart",
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: GridTile(
+                header: Container(
+                  alignment: Alignment.center,
+                  width: MediaQuery.of(context).size.width,
+                  height: 30,
+                  decoration: BoxDecoration(
+                    color: Colors.black38,
                   ),
-                  content: Text('Added To Card'),
-                  duration: Duration(seconds: 1),
-                  behavior: SnackBarBehavior.floating,
-                ));
-              },
-            ),
-            title: IconButton(
-              icon: Icon(
-                  product.isFavorite ? Icons.favorite : Icons.favorite_border),
-              onPressed: () {
-                product.toggleFavorite();
-              },
-            ),
-          ),
-          child: GestureDetector(
-            onTap: () {
-              Navigator.pushNamed(
-                context,
-                ProductDetailsScreen.routeName,
-                arguments: product.id,
-              );
-            },
-            child: Hero(
-              tag: product.hashCode,
-              child: FadeInImage(
-                image: NetworkImage(product.imageUrl),
-                placeholder: AssetImage('images/placeholder.png'),
-                fit: BoxFit.cover,
+                  child: Text(
+                    "${product.title}",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
+                footer: GridTileBar(
+                  backgroundColor: Colors.black54,
+                  leading: Text("₹${product.price}",
+                      textAlign: TextAlign.center,
+                      maxLines: 2,
+                      style: TextStyle(color: Colors.white)),
+                  trailing: IconButton(
+                    icon: Icon(Icons.shopping_cart),
+                    onPressed: () {
+                      cart.addItem(product.id, product.title, product.price);
+                      Scaffold.of(context).showSnackBar(SnackBar(
+                        action: SnackBarAction(
+                          onPressed: () {
+                            Navigator.of(context)
+                                .pushNamed(ShoppingCart.routeName);
+                          },
+                          label: "Cart",
+                        ),
+                        content: Text('Added To Card'),
+                        duration: Duration(seconds: 1),
+                        behavior: SnackBarBehavior.floating,
+                      ));
+                    },
+                  ),
+                  title: IconButton(
+                    icon: Icon(product.isFavorite
+                        ? Icons.favorite
+                        : Icons.favorite_border),
+                    onPressed: () {
+                      product.toggleFavorite();
+                    },
+                  ),
+                ),
+                child: FadeInImage(
+                  image: NetworkImage(product.imageUrl),
+                  placeholder: AssetImage('images/placeholder.png'),
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
           ),

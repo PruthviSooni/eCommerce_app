@@ -43,6 +43,7 @@ class ProductDetailsScreen extends StatelessWidget {
               child: Text(
                 "Order Now",
                 style: TextStyle(fontSize: 18),
+
               ),
               color: Theme.of(context).primaryColor,
             ),

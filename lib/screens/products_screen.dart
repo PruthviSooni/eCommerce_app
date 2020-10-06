@@ -149,7 +149,7 @@ class _ProductScreenState extends State<ProductScreen>
                                   AnimationConfiguration.staggeredList(
                                 position: i,
                                 child: SlideAnimation(
-                                  duration: Duration(milliseconds: 700),
+                                  duration: Duration(milliseconds: 500),
                                   child: FadeInAnimation(
                                     child: ChangeNotifierProvider.value(
                                       value: productsData[i],

@@ -64,6 +64,7 @@ class Products with ChangeNotifier {
         description: product.description,
         price: product.price,
         imageUrl: product.imageUrl,
+        isFavorite: product.isFavorite,
       );
       _items.add(newProduct);
       notifyListeners();
@@ -81,6 +82,7 @@ class Products with ChangeNotifier {
             'description': newProduct.description,
             'price': newProduct.price,
             'imgUrl': newProduct.imageUrl,
+            'isFavorite': newProduct.isFavorite,
           }));
       _items[index] = newProduct;
 
@@ -90,8 +92,19 @@ class Products with ChangeNotifier {
     }
   }
 
-  void removeProduct(String id) {
-    _items.removeWhere((product) => product.id == id);
+  Future<void> removeProduct(String id) async {
+    var _url = "https://ecommerceapp-9e37c.firebaseio.com/products/$id.json";
+    final existingProductIndex =
+        _items.indexWhere((product) => product.id == id);
+    var existingProduct = _items[existingProductIndex];
+    _items.removeAt(existingProductIndex);
     notifyListeners();
+    final res = await http.delete(_url);
+    if (res.statusCode >= 400) {
+      _items.insert(existingProductIndex, existingProduct);
+      notifyListeners();
+      throw HttpException("Failed to Delete product");
+    }
+    existingProduct = null;
   }
 }

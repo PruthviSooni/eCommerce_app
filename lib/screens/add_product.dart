@@ -214,29 +214,54 @@ class _AddProductScreenState extends State<AddProductScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
-                        Container(
-                            height: 150,
-                            width: 150,
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                  color: imgUrl.isEmpty
-                                      ? Colors.red.shade500
-                                      : Colors.grey.shade500,
-                                  width: 1),
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            child: imgUrl.isEmpty &&
-                                    _editingFields.imageUrl.isEmpty
-                                ? Icon(
-                                    Icons.add_a_photo,
-                                  )
-                                : ClipRRect(
-                                    borderRadius: BorderRadius.circular(12),
+                        GestureDetector(
+                          onTap: () => showModalBottomSheet(
+                              context: context,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(12),
+                                  topRight: Radius.circular(12),
+                                ),
+                              ),
+                              builder: (ctx) {
+                                return Container(
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(12),
+                                      topRight: Radius.circular(12),
+                                    ),
                                     child: Image.network(
                                       _imgUrlController.text,
-                                      fit: BoxFit.cover,
+                                      fit: BoxFit.fill,
                                     ),
-                                  )),
+                                  ),
+                                );
+                              }),
+                          child: Container(
+                              height: 150,
+                              width: 150,
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                    color: imgUrl.isEmpty &&
+                                            _editingFields.imageUrl.isEmpty
+                                        ? Colors.red.shade500
+                                        : Colors.grey.shade500,
+                                    width: 1),
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: imgUrl.isEmpty &&
+                                      _editingFields.imageUrl.isEmpty
+                                  ? Icon(
+                                      Icons.add_a_photo,
+                                    )
+                                  : ClipRRect(
+                                      borderRadius: BorderRadius.circular(12),
+                                      child: Image.network(
+                                        _imgUrlController.text,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    )),
+                        ),
                         Container(
                           width: 230,
                           margin: EdgeInsets.only(bottom: 5),

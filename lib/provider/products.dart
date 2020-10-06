@@ -72,7 +72,6 @@ class Products with ChangeNotifier {
       print(e.message);
     }
   }
-
   Future<void> updateProduct(String id, Product newProduct) async {
     var index = _items.indexWhere((element) => element.id == id);
     if (index >= 0) {
@@ -86,6 +85,7 @@ class Products with ChangeNotifier {
             'isFavorite': newProduct.isFavorite,
           }));
       _items[index] = newProduct;
+
       notifyListeners();
     } else {
       print('product is different');

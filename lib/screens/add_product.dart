@@ -78,7 +78,8 @@ class _AddProductScreenState extends State<AddProductScreen> {
     setState(() {
       isLoading = false;
     });
-    Navigator.pop(context);
+
+  Navigator.pop(context);
   }
 
   @override

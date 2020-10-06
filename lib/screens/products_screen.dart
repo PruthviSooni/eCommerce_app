@@ -29,6 +29,7 @@ class _ProductScreenState extends State<ProductScreen>
   bool isGridView = false;
   var _isInit = true;
   var _isLoading = false;
+
   @override
   void initState() {
     _controller = AnimationController(
@@ -184,6 +185,7 @@ class _ProductScreenState extends State<ProductScreen>
                             itemCount: productsData.length,
                           ),
                         );
+
             },
           ),
         ));

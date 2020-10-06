@@ -1,0 +1,21 @@
+[33mcommit 7bc9e152939de2f70b0a1870e44107f0101ebc57[m[33m ([m[1;36mHEAD -> [m[1;32mdev[m[33m)[m
+Author: PruthviSooni <pruthvisoni@gmail.com>
+Date:   Mon Oct 5 18:19:06 2020 +0530
+
+    Added Firebase realtime database
+
+[33mcommit aee5abffaf18075350ac198b3b37154d6a4c9680[m[33m ([m[1;31morigin/dev[m[33m, [m[1;32mmaster[m[33m)[m
+Author: PruthviSooni <pruthvisoni@gmail.com>
+Date:   Sun Oct 4 14:00:18 2020 +0530
+
+    -Added animated gridview and listview
+    
+    -validate add product screen widgets
+    
+    -UX better
+
+[33mcommit 6c2e1f927fbf22e557e0093f88dae6fdf2114fb6[m
+Author: PruthviSooni <pruthvisoni@gmail.com>
+Date:   Fri Oct 2 08:00:10 2020 +0530
+
+    Initial Commit

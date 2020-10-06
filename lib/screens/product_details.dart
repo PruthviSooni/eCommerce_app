@@ -30,6 +30,11 @@ class ProductDetailsScreen extends StatelessWidget {
         color: Colors.grey.shade800,
         child: Scaffold(
           appBar: AppBar(
+            automaticallyImplyLeading: false,
+            leading: IconButton(
+              icon: Icon(Icons.arrow_back),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
             title: Text(loadedProduct.title),
           ),
           floatingActionButton: Container(

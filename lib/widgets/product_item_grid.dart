@@ -17,8 +17,8 @@ class ProductItemGrid extends StatelessWidget {
         Navigator.push(
           context,
           PageRouteBuilder(
-              reverseTransitionDuration: Duration(milliseconds: 700),
-              transitionDuration: Duration(milliseconds: 700),
+              reverseTransitionDuration: Duration(milliseconds: 500),
+              transitionDuration: Duration(milliseconds: 500),
               maintainState: true,
               pageBuilder: (_, __, ___) => ProductDetailsScreen(
                     id: product.id,
@@ -59,8 +59,9 @@ class ProductItemGrid extends StatelessWidget {
                       style: TextStyle(color: Colors.white)),
                   trailing: IconButton(
                     icon: Icon(Icons.shopping_cart),
-                    onPressed: () {
-                      cart.addItem(product.id, product.title, product.price);
+                    onPressed: () async {
+                      await cart.addItem(
+                          product.id, product.title, product.price);
                       Scaffold.of(context).showSnackBar(SnackBar(
                         action: SnackBarAction(
                           onPressed: () {

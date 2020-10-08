@@ -5,9 +5,11 @@
         "titleBar.activeForeground": "#ECFEF8"
     },
     "cSpell.words": [
+        "assests",
+        "cupertino",
         "ecommerce",
         "multiline",
         "vsync"
-   ],
+    ],
     "editor.acceptSuggestionOnEnter": "smart"
 }

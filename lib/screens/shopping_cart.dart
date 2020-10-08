@@ -1,3 +1,5 @@
+import 'package:ecommerce_app/screens/order_screen.dart';
+import 'package:ecommerce_app/utils/assests.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -18,7 +20,11 @@ class ShoppingCart extends StatelessWidget {
       duration: Duration(seconds: 3),
       content: Text(msg),
       action: isEmpty == false
-          ? SnackBarAction(label: "", onPressed: () {})
+          ? SnackBarAction(
+              label: "Show Order",
+              onPressed: () {
+                Navigator.of(ctx).pushNamed(OrderScreen.routeName);
+              })
           : SnackBarAction(
               onPressed: () {
                 Navigator.pop(ctx);
@@ -29,11 +35,9 @@ class ShoppingCart extends StatelessWidget {
   }
 
   final _key = GlobalKey<ScaffoldState>();
-
   @override
   Widget build(BuildContext context) {
     var cart = Provider.of<Cart>(context);
-
     return Scaffold(
       key: _key,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
@@ -142,7 +146,7 @@ class ShoppingCart extends StatelessWidget {
                                                 fontWeight: FontWeight.bold),
                                           ),
                                           Text(
-                                            "${cartItems.quantity}x ₹${cartItems.price}",
+                                            "${cartItems.quantity}x ₹${Assets.price.format(cartItems.price)}",
                                             style: TextStyle(
                                                 fontSize: 14,
                                                 color: Colors.grey.shade400),

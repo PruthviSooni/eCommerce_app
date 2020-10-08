@@ -23,19 +23,19 @@ class Product with ChangeNotifier {
     notifyListeners();
   }
 
-  void toggleFavorite() async {
+  Future<void> toggleFavorite() async {
     var _url = "https://ecommerceapp-9e37c.firebaseio.com/products/$id.json";
-
     final oldState = isFavorite;
     isFavorite = !isFavorite;
     notifyListeners();
-
     try {
       final res =
           await http.patch(_url, body: json.encode({'isFavorite': isFavorite}));
       if (res.statusCode >= 400) {
         _setFavorite(oldState);
       }
+      var status = json.decode(res.body)['isFavorite'];
+      return status;
     } catch (_) {
       _setFavorite(oldState);
     }

@@ -1,4 +1,7 @@
+import 'package:intl/intl.dart';
+
 class Assets {
+  static var price = new NumberFormat("###,##0.00", "en_US");
   static String baseUrl =
       'https://raw.githubusercontent.com/PruthviSooni/eCommerce_app/master/data';
   static final String image1 = "$baseUrl/1.jfif";

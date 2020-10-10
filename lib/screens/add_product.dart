@@ -1,10 +1,11 @@
-import '../provider/products.dart';
-import '../provider/product.dart';
-import '../utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:validators/validators.dart';
+
+import '../provider/product.dart';
+import '../provider/products.dart';
+import '../utils/constants.dart';
 
 class AddProductScreen extends StatefulWidget {
   static const String routeName = 'AddProductScreen';
@@ -273,6 +274,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                   textInputAction: TextInputAction.done,
                   decoration:
                       kTextFieldDecoration.copyWith(labelText: "Image Path"),
+                  // ignore: missing_return
                   validator: (value) {
                     bool url = isURL(value);
                     if (url == false) {

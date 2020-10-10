@@ -60,8 +60,9 @@ class ProductItemGrid extends StatelessWidget {
                       style: TextStyle(color: Colors.white)),
                   trailing: IconButton(
                     icon: Icon(Icons.shopping_cart),
-                    onPressed: () {
-                      cart.addItem(product.id, product.title, product.price);
+                    onPressed: () async {
+                      await cart.addItem(
+                          product.id, product.title, product.price);
                       Scaffold.of(context).showSnackBar(SnackBar(
                         action: SnackBarAction(
                           onPressed: () {

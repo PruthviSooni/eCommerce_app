@@ -43,6 +43,7 @@ class Order with ChangeNotifier {
         }).toList(),
       ));
     });
+
     _orders = loadedData.reversed.toList();
     notifyListeners();
   }

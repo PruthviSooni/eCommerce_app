@@ -1,9 +1,15 @@
 import 'package:date_format/date_format.dart';
+import 'package:ecommerce_app/utils/assests.dart';
+import 'package:ecommerce_app/widgets/order_items.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../provider/order.dart';
+import '../provider/order.dart' as orders;
+
+dynamic price(dynamic price) {
+  return Assets.price.format(double.parse(price));
+}
 
 class OrderScreen extends StatefulWidget {
   static final String routeName = 'OrderScreen';
@@ -33,81 +39,40 @@ class _OrderScreenState extends State<OrderScreen> {
       appBar: AppBar(
         title: Text("Processing Order"),
       ),
-      body: _isLoading
-          ? Center(child: CircularProgressIndicator())
-          : ListView.builder(
-              itemCount: orderData.order.length,
-              itemBuilder: (ctx, i) {
-                final data = orderData.order[i];
-                return ExpansionTile(
-                  title: Text("₹${data.total}"),
-                  subtitle: Text(
-                    formatDate(data.time, [
-                      'Ordered At ',
-                      hh,
-                      ":",
-                      mm,
-                      " ",
-                      am,
-                      " ",
-                      dd,
-                      "/",
-                      mm,
-                      "/",
-                      yy
-                    ]),
-                  ),
-                  children: [
-                    ListView(
-                      shrinkWrap: true,
-                      padding: EdgeInsets.all(10),
-                      children: data.products
-                          .map((product) => Column(
-                                children: [
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        product.title ?? "",
-                                        style: TextStyle(
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      Text(
-                                        "${product.quantity}x ₹${product.price}",
-                                        style: TextStyle(
-                                            fontSize: 14,
-                                            color: Colors.grey.shade400),
-                                      )
-                                    ],
-                                  ),
-                                ],
-                              ))
-                          .toList(),
-                    ),
-                    Container(
-                      margin: EdgeInsets.only(right: 10, bottom: 10, left: 10),
-                      alignment: Alignment.bottomRight,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            "Total: ",
-                            style: TextStyle(
-                                fontSize: 18, fontWeight: FontWeight.bold),
-                          ),
-                          Text(
-                            "₹${data.total}",
-                            style: TextStyle(
-                                fontSize: 18, fontWeight: FontWeight.bold),
-                          ),
-                        ],
-                      ),
-                    )
-                  ],
+      body: FutureBuilder(
+          future: Provider.of<orders.Order>(context, listen: false).getOrders(),
+          builder: (context, snapshot) {
+            switch (snapshot.connectionState) {
+              case ConnectionState.none:
+                break;
+              case ConnectionState.waiting:
+                return Center(
+                  child: CircularProgressIndicator(),
                 );
-              }),
+                break;
+              case ConnectionState.active:
+                break;
+              case ConnectionState.done:
+                return Consumer<orders.Order>(
+                  builder: (ctx, orderData, _) {
+                    return ListView.builder(
+                        itemCount: orderData.order.length,
+                        itemBuilder: (ctx, i) {
+                          final data = orderData.order[i];
+                          return OrderItems(
+                              data: orders.OrderItems(
+                            id: data.id,
+                            products: data.products,
+                            time: data.time,
+                            total: data.total,
+                          ));
+                        });
+                  },
+                );
+                break;
+            }
+            return Container();
+          }),
     );
   }
 }

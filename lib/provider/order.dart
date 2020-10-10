@@ -44,7 +44,8 @@ class Order with ChangeNotifier {
         }).toList(),
       ));
     });
-    _orders = loadedData;
+
+    _orders = loadedData.reversed.toList();
     notifyListeners();
   }
 

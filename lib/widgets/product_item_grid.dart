@@ -1,3 +1,4 @@
+import 'package:ecommerce_app/utils/assests.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -53,7 +54,7 @@ class ProductItemGrid extends StatelessWidget {
                 ),
                 footer: GridTileBar(
                   backgroundColor: Colors.black54,
-                  leading: Text("₹${product.price}",
+                  leading: Text("₹${Assets.price.format(product.price)}",
                       textAlign: TextAlign.center,
                       maxLines: 2,
                       style: TextStyle(color: Colors.white)),
@@ -81,7 +82,7 @@ class ProductItemGrid extends StatelessWidget {
                         ? Icons.favorite
                         : Icons.favorite_border),
                     onPressed: () {
-                      product.toggleFavorite();
+                      product.toggleFavorite().then((value) => print('toggle'));
                     },
                   ),
                 ),

@@ -7,7 +7,7 @@ import '../widgets/manage_products_items.dart';
 
 class ManageProductScreen extends StatelessWidget {
   static const String routeName = 'ManageProductsScreen';
-  GlobalKey<ScaffoldState> _key = GlobalKey<ScaffoldState>();
+  static GlobalKey<ScaffoldState> _key = GlobalKey<ScaffoldState>();
 
   ManageProductScreen({Key key}) : super(key: key);
   @override

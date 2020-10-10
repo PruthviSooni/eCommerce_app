@@ -1,3 +1,4 @@
+import 'package:ecommerce_app/utils/assests.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -19,6 +20,11 @@ class ShoppingCartItems extends StatelessWidget {
     this.price,
     this.quantity,
   }) : super(key: key);
+
+  dynamic format(dynamic price) {
+    print(Assets.price.format(price));
+    return "₹" + Assets.price.format(price);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -73,10 +79,10 @@ class ShoppingCartItems extends StatelessWidget {
                     height: 30,
                   ),
                   CircleAvatar(
-                    radius: 40,
+                    radius: 50,
                     backgroundColor: Theme.of(context).accentColor,
                     child: Text(
-                      '₹${(price).round()}',
+                      format(price),
                       style: TextStyle(color: Colors.black),
                     ),
                   ),
@@ -91,7 +97,7 @@ class ShoppingCartItems extends StatelessWidget {
                     height: 10,
                   ),
                   Text(
-                    "Total: ₹${price * quantity}",
+                    "Total: ${format(price * quantity)}",
                     style: TextStyle(fontSize: 16),
                   ),
                   SizedBox(

@@ -274,7 +274,6 @@ class _AddProductScreenState extends State<AddProductScreen> {
                   textInputAction: TextInputAction.done,
                   decoration:
                       kTextFieldDecoration.copyWith(labelText: "Image Path"),
-                  // ignore: missing_return
                   validator: (value) {
                     bool url = isURL(value);
                     if (url == false) {

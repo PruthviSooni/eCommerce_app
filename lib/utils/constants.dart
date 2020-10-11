@@ -6,3 +6,8 @@ var kTextFieldDecoration = InputDecoration(
     borderRadius: BorderRadius.circular(12),
   ),
 );
+var kInputFieldDecoration = InputDecoration(
+    hintText: "",
+    border: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(12),
+    ));

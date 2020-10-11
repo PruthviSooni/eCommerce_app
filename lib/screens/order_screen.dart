@@ -10,30 +10,11 @@ dynamic price(dynamic price) {
   return Assets.price.format(double.parse(price));
 }
 
-class OrderScreen extends StatefulWidget {
+class OrderScreen extends StatelessWidget {
   static final String routeName = 'OrderScreen';
 
   @override
-  _OrderScreenState createState() => _OrderScreenState();
-}
-
-class _OrderScreenState extends State<OrderScreen> {
-  var _isLoading = false;
-  @override
-  void initState() {
-    getData();
-    super.initState();
-  }
-
-  void getData() async {
-    setState(() => _isLoading = true);
-    await Provider.of<Order>(context, listen: false).getOrders();
-    setState(() => _isLoading = false);
-  }
-
-  @override
   Widget build(BuildContext context) {
-    var orderData = Provider.of<Order>(context);
     return Scaffold(
       appBar: AppBar(
         title: Text("Processing Order"),

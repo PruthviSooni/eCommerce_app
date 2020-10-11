@@ -1,6 +1,7 @@
 import 'package:intl/intl.dart';
 
 class Assets {
+  static const key = 'AIzaSyCBgHCA5nni1v_eeme4MNxNEuJWQBdyfSQ';
   static var price = new NumberFormat("###,##0.00", "en_US");
   static String baseUrl =
       'https://raw.githubusercontent.com/PruthviSooni/eCommerce_app/master/data';

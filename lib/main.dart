@@ -1,17 +1,19 @@
-import 'package:ecommerce_app/utils/assests.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 
+import './provider/auth.dart';
 import './provider/cart.dart';
 import './provider/order.dart';
 import './provider/products.dart';
+import './screens/add_product.dart';
+import './screens/auth_screen.dart';
+import './screens/manage_products.dart';
+import './screens/order_screen.dart';
 import './screens/product_details.dart';
 import './screens/products_screen.dart';
 import './screens/shopping_cart.dart';
-import './screens/add_product.dart';
-import './screens/order_screen.dart';
-import './screens/manage_products.dart';
+import 'utils/assests.dart';
 
 void main() {
   runApp(MyApp());
@@ -24,6 +26,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   var isLoading = false;
+
   Future getImage() async {
     setState(() {
       isLoading = true;
@@ -58,20 +61,26 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(
           create: (ctx) => Order(),
         ),
+        ChangeNotifierProvider(
+          create: (ctx) => Auth(),
+        ),
       ],
       child: MaterialApp(
         theme: ThemeData(
           brightness: Brightness.dark,
+          scaffoldBackgroundColor: Colors.grey.shade900,
           primarySwatch: Colors.deepOrange,
           accentColor: Colors.deepOrange,
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
+        initialRoute: AuthScreen.routeName,
         routes: {
           ProductDetailsScreen.routeName: (ctx) => ProductDetailsScreen(),
           ShoppingCart.routeName: (ctx) => ShoppingCart(),
           OrderScreen.routeName: (ctx) => OrderScreen(),
           AddProductScreen.routeName: (ctx) => AddProductScreen(),
           ManageProductScreen.routeName: (ctx) => ManageProductScreen(),
+          AuthScreen.routeName: (ctx) => AuthScreen(),
         },
         home: ProductScreen(),
       ),

@@ -1,11 +1,10 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 import 'product.dart';
-import 'package:http/http.dart' as http;
 
 class Products with ChangeNotifier {
   List<Product> _items = [];
@@ -68,10 +67,11 @@ class Products with ChangeNotifier {
       );
       _items.add(newProduct);
       notifyListeners();
-    } on FirebaseException catch (e) {
-      print(e.message);
+    } on Exception catch (e) {
+      print(e);
     }
   }
+
   Future<void> updateProduct(String id, Product newProduct) async {
     var index = _items.indexWhere((element) => element.id == id);
     if (index >= 0) {

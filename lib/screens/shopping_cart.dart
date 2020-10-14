@@ -53,7 +53,7 @@ class ShoppingCart extends StatelessWidget {
                 color: Theme.of(context).accentColor,
                 onPressed: () {
                   if (cart.itemCount != 0) {
-                    Provider.of<Order>(context, listen: false).addOrder(
+                    Provider.of<Orders>(context, listen: false).addOrder(
                         cart.items.values.toList(),
                         cart.totalAmount.toString());
                     cart.clearCart();

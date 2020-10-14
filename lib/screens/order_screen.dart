@@ -8,11 +8,6 @@ import '../provider/order.dart' as orders;
 dynamic price(dynamic price) {
   return Assets.price.format(double.parse(price));
 }
-
-dynamic price(dynamic price) {
-  return Assets.price.format(double.parse(price));
-}
-
 class OrderScreen extends StatelessWidget {
   static final String routeName = 'OrderScreen';
 
@@ -23,36 +18,33 @@ class OrderScreen extends StatelessWidget {
         title: Text("Processing Order"),
       ),
       body: FutureBuilder(
-          future: Provider.of<orders.Order>(context, listen: false).getOrders(),
+          future:
+              Provider.of<orders.Orders>(context, listen: false).getOrders(),
           builder: (context, snapshot) {
-            switch (snapshot.connectionState) {
-              case ConnectionState.none:
-                break;
-              case ConnectionState.waiting:
-                return Center(
-                  child: CircularProgressIndicator(),
-                );
-                break;
-              case ConnectionState.active:
-                break;
-              case ConnectionState.done:
-                return Consumer<orders.Order>(
-                  builder: (ctx, orderData, _) {
-                    return ListView.builder(
-                        itemCount: orderData.order.length,
-                        itemBuilder: (ctx, i) {
-                          final data = orderData.order[i];
-                          return OrderItems(
-                              data: orders.OrderItems(
-                            id: data.id,
-                            products: data.products,
-                            time: data.time,
-                            total: data.total,
-                          ));
-                        });
-                  },
-                );
-                break;
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+            if (snapshot.connectionState == ConnectionState.done) {
+              return Consumer<orders.Orders>(
+                builder: (ctx, orderData, _) {
+                  print('${orderData.getOrders()}');
+                  print("Orders => ${orderData.order.length}");
+                  return ListView.builder(
+                      itemCount: orderData.order.length,
+                      itemBuilder: (ctx, i) {
+                        final data = orderData.order[i];
+                        return OrderItems(
+                            data: orders.OrderItems(
+                          id: data.id,
+                          products: data.products,
+                          time: data.time,
+                          total: data.total,
+                        ));
+                      });
+                },
+              );
             }
             return Container();
           }),

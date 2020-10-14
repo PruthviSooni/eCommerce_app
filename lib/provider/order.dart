@@ -14,13 +14,18 @@ class OrderItems {
   OrderItems({this.id, this.total, this.products, this.time});
 }
 
-class Order with ChangeNotifier {
+class Orders with ChangeNotifier {
   List<OrderItems> _orders = [];
+  final String token;
 
   List<OrderItems> get order => [..._orders];
 
+  Orders(this.token, this._orders);
+
   Future<void> getOrders() async {
-    var _url = "https://ecommerceapp-9e37c.firebaseio.com/orders.json";
+    var _url =
+        "https://ecommerceapp-9e37c.firebaseio.com/orders.json?auth=$token";
+    // print('order token ==> $token');
     final res = await http.get(_url);
     List<OrderItems> loadedData = [];
     final data = jsonDecode(res.body) as Map<String, dynamic>;
@@ -33,7 +38,6 @@ class Order with ChangeNotifier {
         time: DateTime.parse(orderData['time']),
         total: orderData['total'],
         products: (orderData['products'] as List<dynamic>).map((cartItem) {
-          print(cartItem['title']);
           return CartItems(
             id: cartItem['id'],
             price: cartItem['price'],
@@ -43,13 +47,13 @@ class Order with ChangeNotifier {
         }).toList(),
       ));
     });
-
     _orders = loadedData.reversed.toList();
     notifyListeners();
   }
 
   Future<void> addOrder(List<CartItems> cartItems, String total) async {
-    var _url = "https://ecommerceapp-9e37c.firebaseio.com/orders.json";
+    var _url =
+        "https://ecommerceapp-9e37c.firebaseio.com/orders.json?auth=$token";
 
     try {
       var timeStamp = DateTime.now();

@@ -17,7 +17,8 @@ dependencies:
   validators: ^2.0.1
   flutter_staggered_animations: ^0.1.2
   intl:
-  #================================
+  splashscreen:
+#================================
 dev_dependencies:
   flutter_test:
     sdk: flutter

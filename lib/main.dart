@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 
 import './provider/auth.dart';
@@ -13,77 +12,58 @@ import './screens/order_screen.dart';
 import './screens/product_details.dart';
 import './screens/products_screen.dart';
 import './screens/shopping_cart.dart';
-import 'utils/assests.dart';
+void main() => runApp(MyApp());
 
-void main() {
-  runApp(MyApp());
-}
-
-class MyApp extends StatefulWidget {
-  @override
-  _MyAppState createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
-  var isLoading = false;
-
-  Future getImage() async {
-    setState(() {
-      isLoading = true;
-    });
-    final response = await http.get(Assets.image1);
-    if (response.statusCode == 200) {
-      setState(() {
-        isLoading = false;
-      });
-      return response;
-    }
-  }
-
-  @override
-  void didChangeDependencies() {
-    setState(() {
-      getImage();
-    });
-    super.didChangeDependencies();
-  }
-
+class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(
-          create: (ctx) => Products(),
+        ChangeNotifierProvider<Auth>(
+          create: (_) => Auth(),
+        ),
+        // ignore: missing_required_param
+        ChangeNotifierProxyProvider<Auth, Products>(
+          update: (ctx, auth, previousProducts) => Products(
+            auth.token,
+            previousProducts == null ? [] : previousProducts.items,
+          ),
         ),
         ChangeNotifierProvider(
           create: (ctx) => Cart(),
         ),
-        ChangeNotifierProvider(
-          create: (ctx) => Order(),
+        // ignore: missing_required_param
+        ChangeNotifierProxyProvider<Auth, Orders>(
+          update: (_, auth, oldOrders) => Orders(
+            auth.token,
+            oldOrders == null ? [] : oldOrders.order,
+          ),
         ),
         ChangeNotifierProvider(
           create: (ctx) => Auth(),
         ),
       ],
-      child: MaterialApp(
-        theme: ThemeData(
-          brightness: Brightness.dark,
-          scaffoldBackgroundColor: Colors.grey.shade900,
-          primarySwatch: Colors.deepOrange,
-          accentColor: Colors.deepOrange,
-          visualDensity: VisualDensity.adaptivePlatformDensity,
-        ),
-        initialRoute: AuthScreen.routeName,
-        routes: {
-          ProductDetailsScreen.routeName: (ctx) => ProductDetailsScreen(),
-          ShoppingCart.routeName: (ctx) => ShoppingCart(),
-          OrderScreen.routeName: (ctx) => OrderScreen(),
-          AddProductScreen.routeName: (ctx) => AddProductScreen(),
-          ManageProductScreen.routeName: (ctx) => ManageProductScreen(),
-          AuthScreen.routeName: (ctx) => AuthScreen(),
-        },
-        home: ProductScreen(),
-      ),
+      child: Consumer<Auth>(
+          builder: (__, auth, _) => MaterialApp(
+                home: auth.isAuth ? ProductScreen() : AuthScreen(),
+                theme: ThemeData(
+                  brightness: Brightness.dark,
+                  scaffoldBackgroundColor: Colors.grey.shade900,
+                  primarySwatch: Colors.deepOrange,
+                  accentColor: Colors.deepOrange,
+                  visualDensity: VisualDensity.adaptivePlatformDensity,
+                ),
+                // initialRoute: AuthScreen.routeName,
+                routes: {
+                  ProductDetailsScreen.routeName: (ctx) =>
+                      ProductDetailsScreen(),
+                  ShoppingCart.routeName: (ctx) => ShoppingCart(),
+                  OrderScreen.routeName: (ctx) => OrderScreen(),
+                  AddProductScreen.routeName: (ctx) => AddProductScreen(),
+                  ManageProductScreen.routeName: (ctx) => ManageProductScreen(),
+                  AuthScreen.routeName: (ctx) => AuthScreen(),
+                },
+              )),
     );
   }
 }

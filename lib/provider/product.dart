@@ -1,6 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'dart:convert';
 
 class Product with ChangeNotifier {
   final String id;
@@ -9,6 +10,7 @@ class Product with ChangeNotifier {
   final String imageUrl;
   final String description;
   bool isFavorite;
+  final String token;
 
   Product({
     this.id,
@@ -17,15 +19,17 @@ class Product with ChangeNotifier {
     this.imageUrl,
     this.description,
     this.isFavorite = false,
+    this.token,
   });
+
   void _setFavorite(status) {
     isFavorite = status;
     notifyListeners();
   }
 
-
   Future<void> toggleFavorite() async {
-    var _url = "https://ecommerceapp-9e37c.firebaseio.com/products/$id.json";
+    var _url =
+        "https://ecommerceapp-9e37c.firebaseio.com/products/$id.json?auth=$token";
     final oldState = isFavorite;
     isFavorite = !isFavorite;
     notifyListeners();

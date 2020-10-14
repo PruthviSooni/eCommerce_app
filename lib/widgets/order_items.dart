@@ -1,6 +1,7 @@
 import 'package:date_format/date_format.dart';
 import 'package:ecommerce_app/utils/assests.dart';
 import 'package:flutter/material.dart';
+
 import '../provider/order.dart' as orders;
 
 class OrderItems extends StatelessWidget {
@@ -12,13 +13,17 @@ class OrderItems extends StatelessWidget {
   final orders.OrderItems data;
 
   dynamic formatPrice(dynamic price) {
-    return Assets.price.format(double.parse(price));
+    if (price is String) {
+      return Assets.price.format(double.parse(price));
+    } else {
+      return Assets.price.format(price);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return ExpansionTile(
-      title: Text("₹${formatPrice(data.total)}"),
+      title: Text("₹${data.total}"),
       subtitle: Text(
         formatDate(data.time,
             ['Ordered At ', hh, ":", mm, " ", am, " ", dd, "/", mm, "/", yy]),
@@ -39,7 +44,7 @@ class OrderItems extends StatelessWidget {
                                 fontSize: 18, fontWeight: FontWeight.bold),
                           ),
                           Text(
-                            "${product.quantity}x ₹${formatPrice(data.total)}",
+                            "${product.quantity}x ₹${data.total}",
                             style: TextStyle(
                                 fontSize: 14, color: Colors.grey.shade400),
                           )
@@ -60,7 +65,7 @@ class OrderItems extends StatelessWidget {
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               Text(
-                "₹${formatPrice(data.total)}",
+                "₹${data.total}",
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
             ],

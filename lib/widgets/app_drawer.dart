@@ -1,11 +1,17 @@
+import 'package:ecommerce_app/provider/auth.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
 import '../screens/add_product.dart';
 import '../screens/manage_products.dart';
 import '../screens/order_screen.dart';
-import 'package:flutter/material.dart';
 
 class AppDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final emailName = Provider.of<Auth>(context, listen: false).email;
+    var i = emailName.indexOf("@");
+    var name = emailName.substring(0, i).toUpperCase();
     var mediaQuery = MediaQuery.of(context).size;
     return Drawer(
       elevation: 200,
@@ -30,7 +36,7 @@ class AppDrawer extends StatelessWidget {
                   color: Colors.transparent,
                 ),
                 Text(
-                  "Hello There!",
+                  "$name",
                   style: TextStyle(fontSize: 18),
                 ),
               ],

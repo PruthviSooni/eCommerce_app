@@ -7,12 +7,14 @@ import 'package:http/http.dart' as http;
 import 'product.dart';
 
 class Products with ChangeNotifier {
+  final String token;
   List<Product> _items = [];
-  var _url = "https://ecommerceapp-9e37c.firebaseio.com/products.json";
 
   List<Product> get items {
     return [..._items];
   }
+
+  Products(this.token, this._items);
 
   List<Product> get favItems {
     return _items.where((element) => element.isFavorite).toList();
@@ -23,6 +25,8 @@ class Products with ChangeNotifier {
   }
 
   Future<void> fetchProducts() async {
+    var _url =
+        "https://ecommerceapp-9e37c.firebaseio.com/products.json?auth=$token";
     try {
       final res = await http.get(_url);
       final data = json.decode(res.body) as Map<String, dynamic>;
@@ -30,6 +34,7 @@ class Products with ChangeNotifier {
       data.forEach((productId, productData) {
         loadedData.add(Product(
           id: productId,
+          token: token,
           title: productData['title'] as String,
           description: productData['description'],
           price: productData['price'],
@@ -45,6 +50,8 @@ class Products with ChangeNotifier {
   }
 
   Future<void> addProduct(Product product) async {
+    final _url =
+        "https://ecommerceapp-9e37c.firebaseio.com/products.json?auth=$token";
     try {
       final res = await http.post(
         _url,
@@ -75,7 +82,8 @@ class Products with ChangeNotifier {
   Future<void> updateProduct(String id, Product newProduct) async {
     var index = _items.indexWhere((element) => element.id == id);
     if (index >= 0) {
-      var _url = "https://ecommerceapp-9e37c.firebaseio.com/products/$id.json";
+      var _url =
+          "https://ecommerceapp-9e37c.firebaseio.com/products/$id.json?auth=$token";
       await http.patch(_url,
           body: jsonEncode({
             'title': newProduct.title,
@@ -93,7 +101,8 @@ class Products with ChangeNotifier {
   }
 
   Future<void> removeProduct(String id) async {
-    var _url = "https://ecommerceapp-9e37c.firebaseio.com/products/$id.json";
+    var _url =
+        "https://ecommerceapp-9e37c.firebaseio.com/products/$id.json?auth=$token";
     final existingProductIndex =
         _items.indexWhere((product) => product.id == id);
     var existingProduct = _items[existingProductIndex];

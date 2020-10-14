@@ -5,11 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../provider/order.dart' as orders;
-
 dynamic price(dynamic price) {
   return Assets.price.format(double.parse(price));
 }
-
 class OrderScreen extends StatelessWidget {
   static final String routeName = 'OrderScreen';
 

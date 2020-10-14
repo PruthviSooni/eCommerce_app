@@ -7,6 +7,7 @@ import 'package:validators/validators.dart';
 
 import '../models/http_exception.dart' as HttpExp;
 
+
 class AuthScreen extends StatefulWidget {
   static const routeName = 'AuthScreen';
 
@@ -21,7 +22,6 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
   Animation<double> _animation;
   Animation<Color> _animation_2;
   var _emailController = TextEditingController();
-  var _nameController = TextEditingController();
   var _passwordController = TextEditingController();
   var _confirmPasswordController = TextEditingController();
 
@@ -55,7 +55,6 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
   }
 
   var focusNode = FocusNode();
-
   Future<void> _formSaved() async {
     var provider = Provider.of<Auth>(context, listen: false);
     var _isValid = _formKey.currentState.validate();
@@ -114,7 +113,6 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
     focusNode.dispose();
     _controller.dispose();
     _controller_2.dispose();
-    _nameController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
     _confirmPasswordController.dispose();
@@ -284,7 +282,6 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
       ),
     );
   }
-
   void showPassword() {
     setState(() {
       _isVisible = !_isVisible;

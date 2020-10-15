@@ -12,7 +12,6 @@ import './screens/order_screen.dart';
 import './screens/product_details.dart';
 import './screens/products_screen.dart';
 import './screens/shopping_cart.dart';
-
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
@@ -39,6 +38,9 @@ class MyApp extends StatelessWidget {
             auth.token,
             oldOrders == null ? [] : oldOrders.order,
           ),
+        ),
+        ChangeNotifierProvider(
+          create: (ctx) => Auth(),
         ),
       ],
       child: Consumer<Auth>(

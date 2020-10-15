@@ -58,7 +58,7 @@ class _ProductScreenState extends State<ProductScreen>
       });
       Provider.of<Products>(context).fetchProducts().then(
             (value) => _isLoading = false,
-      );
+          );
       setState(() {
         _isLoading = true;
       });
@@ -76,7 +76,7 @@ class _ProductScreenState extends State<ProductScreen>
   Widget build(BuildContext context) {
     final product = Provider.of<Products>(context);
     final productsData =
-    showFavoritesOnly == true ? product.favItems : product.items;
+        showFavoritesOnly == true ? product.favItems : product.items;
     return Scaffold(
         appBar: AppBar(
           title: Text("E Commerce Store"),
@@ -143,51 +143,51 @@ class _ProductScreenState extends State<ProductScreen>
               return _isLoading
                   ? LinearProgressIndicator()
                   : isGridView
-                  ? FadeTransition(
-                opacity: _animation,
-                child: AnimationLimiter(
-                  child: ListView.builder(
-                    itemCount: productsData.length,
-                    itemBuilder: (ctx, i) =>
-                        AnimationConfiguration.staggeredList(
-                          position: i,
-                          child: SlideAnimation(
-                            duration: Duration(milliseconds: 500),
-                            child: FadeInAnimation(
-                              child: ChangeNotifierProvider.value(
-                                value: productsData[i],
-                                child: ProductItemList(),
+                      ? FadeTransition(
+                          opacity: _animation,
+                          child: AnimationLimiter(
+                            child: ListView.builder(
+                              itemCount: productsData.length,
+                              itemBuilder: (ctx, i) =>
+                                  AnimationConfiguration.staggeredList(
+                                position: i,
+                                child: SlideAnimation(
+                                  duration: Duration(milliseconds: 500),
+                                  child: FadeInAnimation(
+                                    child: ChangeNotifierProvider.value(
+                                      value: productsData[i],
+                                      child: ProductItemList(),
+                                    ),
+                                  ),
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                  ),
-                ),
-              )
-                  : AnimationLimiter(
-                child: GridView.builder(
-                  gridDelegate:
-                  SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 8,
-                    mainAxisSpacing: 8,
-                  ),
-                  itemBuilder: (ctx, i) {
-                    return AnimationConfiguration.staggeredGrid(
-                      columnCount: 2,
-                      position: i,
-                      child: ScaleAnimation(
-                        duration: Duration(milliseconds: 400),
-                        child: ChangeNotifierProvider.value(
-                          value: productsData[i],
-                          child: ProductItemGrid(),
-                        ),
-                      ),
-                    );
-                  },
-                  itemCount: productsData.length,
-                ),
-              );
+                        )
+                      : AnimationLimiter(
+                          child: GridView.builder(
+                            gridDelegate:
+                                SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
+                              crossAxisSpacing: 8,
+                              mainAxisSpacing: 8,
+                            ),
+                            itemBuilder: (ctx, i) {
+                              return AnimationConfiguration.staggeredGrid(
+                                columnCount: 2,
+                                position: i,
+                                child: ScaleAnimation(
+                                  duration: Duration(milliseconds: 400),
+                                  child: ChangeNotifierProvider.value(
+                                    value: productsData[i],
+                                    child: ProductItemGrid(),
+                                  ),
+                                ),
+                              );
+                            },
+                            itemCount: productsData.length,
+                          ),
+                        );
             },
           ),
         ));

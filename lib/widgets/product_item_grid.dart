@@ -1,18 +1,20 @@
+import 'package:ecommerce_app/provider/auth.dart';
 import 'package:ecommerce_app/utils/assests.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../screens/shopping_cart.dart';
 import '../provider/cart.dart';
 import '../provider/product.dart';
 import '../screens/product_details.dart';
+import '../screens/shopping_cart.dart';
 
 class ProductItemGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var product = Provider.of<Product>(context);
     var cart = Provider.of<Cart>(context);
+    final auth = Provider.of<Auth>(context, listen: false);
     return GestureDetector(
       onTap: () {
         Navigator.push(
@@ -82,7 +84,9 @@ class ProductItemGrid extends StatelessWidget {
                         ? Icons.favorite
                         : Icons.favorite_border),
                     onPressed: () {
-                      product.toggleFavorite().then((value) => print('toggle'));
+                      product
+                          .toggleFavorite(auth.uId)
+                          .then((value) => print('toggle'));
                     },
                   ),
                 ),

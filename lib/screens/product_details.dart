@@ -1,12 +1,13 @@
+import 'package:ecommerce_app/provider/auth.dart';
 import 'package:ecommerce_app/screens/shopping_cart.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 import '../provider/cart.dart';
 import '../provider/products.dart';
 import '../utils/assests.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:provider/provider.dart';
-import 'package:flutter/material.dart';
 
 class ProductDetailsScreen extends StatefulWidget {
   final int tag;
@@ -29,11 +30,13 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   var isFavorite;
   final price = new NumberFormat("#,##0.00", "en_US");
   var _key = GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
     final loadedProduct = Provider.of<Products>(
       context,
     ).findById(widget.id);
+    final auth = Provider.of<Auth>(context, listen: false);
     var addedToCart = Provider.of<Cart>(context);
     isFavorite = loadedProduct.isFavorite;
     return Hero(
@@ -84,7 +87,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
             ),
           ),
           floatingActionButtonLocation:
-              FloatingActionButtonLocation.centerDocked,
+          FloatingActionButtonLocation.centerDocked,
           floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
           body: SingleChildScrollView(
             child: Column(
@@ -93,7 +96,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                   margin: EdgeInsets.all(10),
                   width: MediaQuery.of(context).size.width / 2,
                   decoration:
-                      BoxDecoration(borderRadius: BorderRadius.circular(18)),
+                  BoxDecoration(borderRadius: BorderRadius.circular(18)),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(12),
                     child: Image.network(
@@ -123,7 +126,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                               ? Icons.favorite
                               : Icons.favorite_border),
                           onPressed: () {
-                            loadedProduct.toggleFavorite();
+                            loadedProduct.toggleFavorite(auth.uId);
                             setState(() {
                               isFavorite = loadedProduct.isFavorite;
                             });

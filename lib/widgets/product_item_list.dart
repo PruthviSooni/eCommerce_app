@@ -1,3 +1,4 @@
+import 'package:ecommerce_app/provider/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -14,6 +15,7 @@ class ProductItemList extends StatelessWidget {
   Widget build(BuildContext context) {
     var product = Provider.of<Product>(context);
     var cart = Provider.of<Cart>(context);
+    final auth = Provider.of<Auth>(context, listen: false);
     return Hero(
       tag: product.hashCode,
       child: Material(
@@ -62,7 +64,7 @@ class ProductItemList extends StatelessWidget {
                           ? Icons.favorite
                           : Icons.favorite_border),
                       onPressed: () {
-                        product.toggleFavorite();
+                        product.toggleFavorite(auth.uId);
                       },
                     ),
                   ],

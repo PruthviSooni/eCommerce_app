@@ -17,7 +17,8 @@ dependencies:
   validators: ^2.0.1
   flutter_staggered_animations: ^0.1.2
   intl:
-  splashscreen:
+  shared_preferences: ^0.5.12+2
+  animated_theme_switcher: "^1.0.5"
 #================================
 dev_dependencies:
   flutter_test:

@@ -7,7 +7,6 @@ import 'package:validators/validators.dart';
 
 import '../models/http_exception.dart' as HttpExp;
 
-
 class AuthScreen extends StatefulWidget {
   static const routeName = 'AuthScreen';
 
@@ -122,9 +121,11 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     final deviceSize = MediaQuery.of(context).size;
+    final isPlatformDark =
+        WidgetsBinding.instance.window.platformBrightness == Brightness.light;
     return Scaffold(
       key: _key,
-      backgroundColor: _animation_2.value,
+      backgroundColor: isPlatformDark ? Colors.white : _animation_2.value,
       body: SingleChildScrollView(
         padding: EdgeInsets.only(top: 200),
         child: Form(
@@ -147,7 +148,11 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
                       ),
                       Text(
                         "ECommerce Store",
-                        style: TextStyle(fontSize: 32),
+                        style: TextStyle(
+                            fontSize: 32,
+                            color: isPlatformDark
+                                ? Colors.grey.shade900
+                                : Colors.white),
                       ),
                     ],
                   ),
@@ -195,9 +200,12 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
                           decoration: kInputFieldDecoration.copyWith(
                             hintText: 'Password',
                             suffixIcon: IconButton(
-                              icon: Icon(_isVisible
-                                  ? Icons.visibility_off
-                                  : Icons.visibility),
+                              icon: Icon(
+                                _isVisible
+                                    ? Icons.visibility_off
+                                    : Icons.visibility,
+                                color: Colors.grey,
+                              ),
                               onPressed: showPassword,
                             ),
                           ),
@@ -239,25 +247,28 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
                           decoration: BoxDecoration(),
                           duration: Duration(milliseconds: 500),
                           child: RaisedButton(
+                            color: Theme
+                                .of(context)
+                                .accentColor,
                             shape: RoundedRectangleBorder(
                               borderRadius:
-                                  BorderRadius.circular(_isLoading ? 100 : 12),
+                              BorderRadius.circular(_isLoading ? 100 : 12),
                             ),
                             onPressed: _formSaved,
                             child: _isLoading
                                 ? Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 1.0, vertical: 5.0),
-                                    child: Container(
-                                      height: 35,
-                                      width: 35,
-                                      child: CircularProgressIndicator(
-                                        backgroundColor: Colors.white,
-                                      ),
-                                    ),
-                                  )
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 1.0, vertical: 5.0),
+                              child: Container(
+                                height: 35,
+                                width: 35,
+                                child: CircularProgressIndicator(
+                                  backgroundColor: Colors.white,
+                                ),
+                              ),
+                            )
                                 : Text(
-                                    '${_authMode == AuthState.SignUp ? "SignUp" : "Login"}'),
+                                '${_authMode == AuthState.SignUp ? "SignUp" : "Login"}'),
                           ),
                         ),
                         SizedBox(
@@ -265,9 +276,16 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
                         ),
                         InkWell(
                           onTap: switchMode,
-                          child: Text(_authMode == AuthState.Login
-                              ? 'SignUp here!'
-                              : 'Login here.'),
+                          child: Text(
+                            _authMode == AuthState.Login
+                                ? 'SignUp here!'
+                                : 'Login here.',
+                            style: TextStyle(
+                              color: isPlatformDark
+                                  ? Colors.grey.shade900
+                                  : Colors.white,
+                            ),
+                          ),
                         )
                       ],
                     ),
@@ -280,6 +298,7 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
       ),
     );
   }
+
   void showPassword() {
     setState(() {
       _isVisible = !_isVisible;

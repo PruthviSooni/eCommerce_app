@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:ecommerce_app/models/http_exception.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -8,13 +9,15 @@ import 'product.dart';
 
 class Products with ChangeNotifier {
   final String token;
+  final String uId;
   List<Product> _items = [];
+  var _isDisposed = false;
 
   List<Product> get items {
     return [..._items];
   }
 
-  Products(this.token, this._items);
+  Products(this.token, this.uId, this._items);
 
   List<Product> get favItems {
     return _items.where((element) => element.isFavorite).toList();
@@ -27,26 +30,35 @@ class Products with ChangeNotifier {
   Future<void> fetchProducts() async {
     var _url =
         "https://ecommerceapp-9e37c.firebaseio.com/products.json?auth=$token";
-    try {
-      final res = await http.get(_url);
-      final data = json.decode(res.body) as Map<String, dynamic>;
-      final List<Product> loadedData = [];
-      data.forEach((productId, productData) {
-        loadedData.add(Product(
+    final _url_2 =
+        "https://ecommerceapp-9e37c.firebaseio.com/userFavorites/$uId.json?auth=$token";
+    final res = await http.get(_url);
+    final data = json.decode(res.body) as Map<String, dynamic>;
+    final favRes = await http.get(_url_2);
+    final favData = json.decode(favRes.body);
+    if (data == null) {
+      throw HttpException(data['error']);
+    }
+    List<Product> loadedData = [];
+    data.forEach((productId, productData) => loadedData.add(Product(
           id: productId,
           token: token,
-          title: productData['title'] as String,
+          title: productData['title'],
           description: productData['description'],
           price: productData['price'],
-          isFavorite: productData['isFavorite'],
+          isFavorite: favData == null ? false : favData[productId] ?? false,
           imageUrl: productData['imgUrl'],
-        ));
-        _items = loadedData;
-        notifyListeners();
-      });
-    } on HttpException catch (e) {
-      print(e.message);
+        )));
+    _items = loadedData;
+    if (!_isDisposed) {
+      notifyListeners();
     }
+  }
+
+  @override
+  void dispose() {
+    _isDisposed = true;
+    super.dispose();
   }
 
   Future<void> addProduct(Product product) async {
@@ -60,7 +72,6 @@ class Products with ChangeNotifier {
           "description": product.description,
           "price": product.price,
           "imgUrl": product.imageUrl,
-          "isFavorite": product.isFavorite,
         }),
       );
       print('Data added');
@@ -70,7 +81,7 @@ class Products with ChangeNotifier {
         description: product.description,
         price: product.price,
         imageUrl: product.imageUrl,
-        isFavorite: product.isFavorite,
+        // isFavorite: product.isFavorite,
       );
       _items.add(newProduct);
       notifyListeners();

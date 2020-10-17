@@ -5,9 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../provider/order.dart' as orders;
+
 dynamic price(dynamic price) {
   return Assets.price.format(double.parse(price));
 }
+
 class OrderScreen extends StatelessWidget {
   static final String routeName = 'OrderScreen';
 
@@ -29,8 +31,6 @@ class OrderScreen extends StatelessWidget {
             if (snapshot.connectionState == ConnectionState.done) {
               return Consumer<orders.Orders>(
                 builder: (ctx, orderData, _) {
-                  print('${orderData.getOrders()}');
-                  print("Orders => ${orderData.order.length}");
                   return ListView.builder(
                       itemCount: orderData.order.length,
                       itemBuilder: (ctx, i) {

@@ -1,3 +1,4 @@
+import 'package:animated_theme_switcher/animated_theme_switcher.dart';
 import 'package:ecommerce_app/utils/assests.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -39,7 +40,7 @@ class ShoppingCartItems extends StatelessWidget {
                 builder: (ctx) => AlertDialog(
                   title: Text("Are you Sure?"),
                   content:
-                      Text("Do you want to remove the item from the cart!"),
+                  Text("Do you want to remove the item from the cart!"),
                   actions: [
                     FlatButton(
                       onPressed: () {
@@ -107,11 +108,12 @@ class ShoppingCartItems extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       CircleAvatar(
-                        backgroundColor: Colors.grey.shade700,
+                        backgroundColor:
+                            ThemeProvider.of(context).backgroundColor,
                         child: IconButton(
                           icon: Icon(
                             Icons.add,
-                            color: Colors.lightBlue,
+                            color: Colors.deepOrange,
                           ),
                           onPressed: () {
                             Provider.of<Cart>(context, listen: false)
@@ -128,21 +130,24 @@ class ShoppingCartItems extends StatelessWidget {
                       ),
                       quantity == 1
                           ? Container(
-                              width: 40,
-                            )
+                        width: 40,
+                      )
                           : CircleAvatar(
-                              backgroundColor: Colors.grey.shade700,
-                              child: IconButton(
-                                icon: Icon(
-                                  Icons.remove,
-                                  color: Colors.lightBlue,
-                                ),
-                                onPressed: () {
-                                  Provider.of<Cart>(context, listen: false)
-                                      .removeQuantity(productId);
-                                },
-                              ),
-                            ),
+                        backgroundColor:
+                        ThemeProvider
+                            .of(context)
+                            .backgroundColor,
+                        child: IconButton(
+                          icon: Icon(
+                            Icons.remove,
+                            color: Colors.deepOrange,
+                          ),
+                          onPressed: () {
+                            Provider.of<Cart>(context, listen: false)
+                                .removeQuantity(productId);
+                          },
+                        ),
+                      ),
                     ],
                   )
                 ],

@@ -69,6 +69,8 @@ class _ProductScreenState extends State<ProductScreen>
 
   @override
   void dispose() {
+    _controller.dispose();
+    _controller_2.dispose();
     super.dispose();
   }
 
@@ -160,34 +162,31 @@ class _ProductScreenState extends State<ProductScreen>
                               ),
                             ),
                           ),
-                        ),
-                  ),
-                ),
-              )
-                  : AnimationLimiter(
-                child: GridView.builder(
-                  gridDelegate:
-                  SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 8,
-                    mainAxisSpacing: 8,
-                  ),
-                  itemBuilder: (ctx, i) {
-                    return AnimationConfiguration.staggeredGrid(
-                      columnCount: 2,
-                      position: i,
-                      child: ScaleAnimation(
-                        duration: Duration(milliseconds: 400),
-                        child: ChangeNotifierProvider.value(
-                          value: productsData[i],
-                          child: ProductItemGrid(),
-                        ),
-                      ),
-                    );
-                  },
-                  itemCount: productsData.length,
-                ),
-              );
+                        )
+                      : AnimationLimiter(
+                          child: GridView.builder(
+                            gridDelegate:
+                                SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
+                              crossAxisSpacing: 8,
+                              mainAxisSpacing: 8,
+                            ),
+                            itemBuilder: (ctx, i) {
+                              return AnimationConfiguration.staggeredGrid(
+                                columnCount: 2,
+                                position: i,
+                                child: ScaleAnimation(
+                                  duration: Duration(milliseconds: 400),
+                                  child: ChangeNotifierProvider.value(
+                                    value: productsData[i],
+                                    child: ProductItemGrid(),
+                                  ),
+                                ),
+                              );
+                            },
+                            itemCount: productsData.length,
+                          ),
+                        );
             },
           ),
         ));

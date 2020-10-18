@@ -1,8 +1,10 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/http_exception.dart';
 import '../utils/assests.dart';
@@ -14,14 +16,15 @@ class Auth with ChangeNotifier {
   String error;
   http.Response res;
   String _email;
-
-  bool get isAuth => _token != null;
-
+  Timer authTimer;
   String get email {
     if (_email != null) {
       return _email;
     }
     return 'null';
+  }
+  bool get isAuth {
+    return token != null;
   }
 
   String get token {
@@ -46,7 +49,6 @@ class Auth with ChangeNotifier {
             'returnSecureToken': true,
           }));
       var data = jsonDecode(res.body);
-      print(data);
       if (data['error'] != null) {
         throw HttpException(data['error']['message']);
       }
@@ -58,9 +60,40 @@ class Auth with ChangeNotifier {
           seconds: int.parse(data['expiresIn']),
         ),
       );
+      _autoLogout();
       notifyListeners();
+      final prefs = await SharedPreferences.getInstance();
+      final userData = json.encode({
+        'token': _token,
+        'userId': uId,
+        'expireTime': _expire.toIso8601String(),
+        'email': _email,
+      });
+      prefs.setString('userData', userData);
     } catch (e) {
       throw e;
+    }
+  }
+
+  Future<bool> tryAutoLogin() async {
+    final prefs = await SharedPreferences.getInstance();
+    if (!prefs.containsKey('userData')) {
+      return false;
+    }
+    final extractedUserData =
+        json.decode(prefs.getString('userData')) as Map<String, Object>;
+    final expiryDate = DateTime.parse(extractedUserData['expireTime']);
+
+    if (expiryDate.isBefore(DateTime.now())) {
+      return false;
+    } else {
+      _token = extractedUserData['token'];
+      _uId = extractedUserData['userId'];
+      _expire = expiryDate;
+      _email = extractedUserData['email'];
+      notifyListeners();
+      _autoLogout();
+      return true;
     }
   }
 
@@ -70,5 +103,28 @@ class Auth with ChangeNotifier {
 
   Future<void> signIn(email, password) async {
     return _authenticate(email, password, 'signInWithPassword');
+  }
+
+  Future<void> logout() async {
+    _token = null;
+    _uId = null;
+    _expire = null;
+    _email = null;
+    if (authTimer != null) {
+      authTimer.cancel();
+      authTimer = null;
+    }
+    notifyListeners();
+    final prefs = await SharedPreferences.getInstance();
+    prefs.clear();
+  }
+
+  void _autoLogout() {
+    if (authTimer != null) {
+      authTimer.cancel();
+    }
+    var timeToLogout = _expire.difference(DateTime.now()).inSeconds;
+    authTimer = Timer(Duration(seconds: timeToLogout), logout);
+
   }
 }

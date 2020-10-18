@@ -228,6 +228,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                       topRight: Radius.circular(12),
                     ),
                   ),
+                  barrierColor: Colors.black26,
                   builder: (ctx) {
                     return Container(
                       child: ClipRRect(
@@ -274,6 +275,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                   textInputAction: TextInputAction.done,
                   decoration:
                       kTextFieldDecoration.copyWith(labelText: "Image Path"),
+                  // ignore: missing_return
                   validator: (value) {
                     bool url = isURL(value);
                     if (url == false) {

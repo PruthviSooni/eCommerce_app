@@ -7,7 +7,6 @@ import 'package:validators/validators.dart';
 
 import '../models/http_exception.dart' as HttpExp;
 
-
 class AuthScreen extends StatefulWidget {
   static const routeName = 'AuthScreen';
 
@@ -122,9 +121,11 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     final deviceSize = MediaQuery.of(context).size;
+    final isPlatformDark =
+        WidgetsBinding.instance.window.platformBrightness == Brightness.light;
     return Scaffold(
       key: _key,
-      backgroundColor: _animation_2.value,
+      backgroundColor: isPlatformDark ? Colors.white : _animation_2.value,
       body: SingleChildScrollView(
         padding: EdgeInsets.only(top: 200),
         child: Form(
@@ -147,7 +148,11 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
                       ),
                       Text(
                         "ECommerce Store",
-                        style: TextStyle(fontSize: 32),
+                        style: TextStyle(
+                            fontSize: 32,
+                            color: isPlatformDark
+                                ? Colors.grey.shade900
+                                : Colors.white),
                       ),
                     ],
                   ),
@@ -167,7 +172,7 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
                       borderRadius: BorderRadius.circular(12)),
                   margin: EdgeInsets.all(18),
                   padding:
-                  EdgeInsets.only(bottom: 18, left: 18, right: 18, top: 18),
+                      EdgeInsets.only(bottom: 18, left: 18, right: 18, top: 18),
                   child: SingleChildScrollView(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -195,9 +200,12 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
                           decoration: kInputFieldDecoration.copyWith(
                             hintText: 'Password',
                             suffixIcon: IconButton(
-                              icon: Icon(_isVisible
-                                  ? Icons.visibility_off
-                                  : Icons.visibility),
+                              icon: Icon(
+                                _isVisible
+                                    ? Icons.visibility_off
+                                    : Icons.visibility,
+                                color: Colors.grey,
+                              ),
                               onPressed: showPassword,
                             ),
                           ),
@@ -211,27 +219,27 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
                         SizedBox(height: 10),
                         _authMode == AuthState.SignUp
                             ? TextFormField(
-                          obscureText: _isVisible,
-                          controller: _confirmPasswordController,
-                          decoration: kInputFieldDecoration.copyWith(
-                            hintText: 'Confirm Password',
-                            suffixIcon: IconButton(
-                              icon: Icon(_isVisible
-                                  ? Icons.visibility_off
-                                  : Icons.visibility),
-                              onPressed: showPassword,
-                            ),
-                          ),
-                          // ignore: missing_return
-                          validator: (value) {
-                            if (value.isEmpty) {
-                              return 'Please confirm password';
-                            } else if (value !=
-                                _passwordController.text) {
-                              return 'Entered password is different';
-                            }
-                          },
-                        )
+                                obscureText: _isVisible,
+                                controller: _confirmPasswordController,
+                                decoration: kInputFieldDecoration.copyWith(
+                                  hintText: 'Confirm Password',
+                                  suffixIcon: IconButton(
+                                    icon: Icon(_isVisible
+                                        ? Icons.visibility_off
+                                        : Icons.visibility),
+                                    onPressed: showPassword,
+                                  ),
+                                ),
+                                // ignore: missing_return
+                                validator: (value) {
+                                  if (value.isEmpty) {
+                                    return 'Please confirm password';
+                                  } else if (value !=
+                                      _passwordController.text) {
+                                    return 'Entered password is different';
+                                  }
+                                },
+                              )
                             : Container(),
                         SizedBox(height: 10),
                         AnimatedContainer(
@@ -239,6 +247,9 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
                           decoration: BoxDecoration(),
                           duration: Duration(milliseconds: 500),
                           child: RaisedButton(
+                            color: Theme
+                                .of(context)
+                                .accentColor,
                             shape: RoundedRectangleBorder(
                               borderRadius:
                               BorderRadius.circular(_isLoading ? 100 : 12),
@@ -257,9 +268,7 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
                               ),
                             )
                                 : Text(
-                                '${_authMode == AuthState.SignUp
-                                    ? "SignUp"
-                                    : "Login"}'),
+                                '${_authMode == AuthState.SignUp ? "SignUp" : "Login"}'),
                           ),
                         ),
                         SizedBox(
@@ -267,9 +276,16 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
                         ),
                         InkWell(
                           onTap: switchMode,
-                          child: Text(_authMode == AuthState.Login
-                              ? 'SignUp here!'
-                              : 'Login here.'),
+                          child: Text(
+                            _authMode == AuthState.Login
+                                ? 'SignUp here!'
+                                : 'Login here.',
+                            style: TextStyle(
+                              color: isPlatformDark
+                                  ? Colors.grey.shade900
+                                  : Colors.white,
+                            ),
+                          ),
                         )
                       ],
                     ),

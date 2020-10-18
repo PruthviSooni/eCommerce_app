@@ -44,7 +44,8 @@ class OrderItems extends StatelessWidget {
                                 fontSize: 18, fontWeight: FontWeight.bold),
                           ),
                           Text(
-                            "${product.quantity}x ₹${data.total}",
+                            "${product.quantity}x ₹${formatPrice(
+                                product.price)}",
                             style: TextStyle(
                                 fontSize: 14, color: Colors.grey.shade400),
                           )

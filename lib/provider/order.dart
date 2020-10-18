@@ -17,14 +17,15 @@ class OrderItems {
 class Orders with ChangeNotifier {
   List<OrderItems> _orders = [];
   final String token;
+  final String userId;
 
   List<OrderItems> get order => [..._orders];
 
-  Orders(this.token, this._orders);
+  Orders(this.token, this.userId, this._orders);
 
   Future<void> getOrders() async {
     var _url =
-        "https://ecommerceapp-9e37c.firebaseio.com/orders.json?auth=$token";
+        "https://ecommerceapp-9e37c.firebaseio.com/orders/$userId.json?auth=$token";
     // print('order token ==> $token');
     final res = await http.get(_url);
     List<OrderItems> loadedData = [];
@@ -37,14 +38,14 @@ class Orders with ChangeNotifier {
         id: orderId,
         time: DateTime.parse(orderData['time']),
         total: orderData['total'],
-        products: (orderData['products'] as List<dynamic>).map((cartItem) {
-          return CartItems(
-            id: cartItem['id'],
-            price: cartItem['price'],
-            quantity: cartItem['quantity'],
-            title: cartItem['title'],
-          );
-        }).toList(),
+        products: (orderData['products'] as List<dynamic>)
+            .map((cartItem) => CartItems(
+                  id: cartItem['id'],
+                  price: cartItem['price'],
+                  quantity: cartItem['quantity'],
+                  title: cartItem['title'],
+                ))
+            .toList(),
       ));
     });
     _orders = loadedData.reversed.toList();
@@ -53,7 +54,7 @@ class Orders with ChangeNotifier {
 
   Future<void> addOrder(List<CartItems> cartItems, String total) async {
     var _url =
-        "https://ecommerceapp-9e37c.firebaseio.com/orders.json?auth=$token";
+        "https://ecommerceapp-9e37c.firebaseio.com/orders/$userId.json?auth=$token";
 
     try {
       var timeStamp = DateTime.now();
@@ -61,9 +62,10 @@ class Orders with ChangeNotifier {
         _url,
         body: json.encode({
           'products': cartItems
-              .map((ci) => {
-                    'id': ci.id,
-                    'title': ci.title,
+              .map((ci) =>
+          {
+            'id': ci.id,
+            'title': ci.title,
                     'price': ci.price,
                     'quantity': ci.quantity,
                   })
@@ -72,7 +74,6 @@ class Orders with ChangeNotifier {
           'time': timeStamp.toIso8601String(),
         }),
       );
-      print(json.decode(res.body)['name']);
       _orders.insert(
         0,
         OrderItems(

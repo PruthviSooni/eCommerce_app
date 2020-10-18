@@ -29,8 +29,6 @@ class OrderScreen extends StatelessWidget {
             if (snapshot.connectionState == ConnectionState.done) {
               return Consumer<orders.Orders>(
                 builder: (ctx, orderData, _) {
-                  print('${orderData.getOrders()}');
-                  print("Orders => ${orderData.order.length}");
                   return ListView.builder(
                       itemCount: orderData.order.length,
                       itemBuilder: (ctx, i) {

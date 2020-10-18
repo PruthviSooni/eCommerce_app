@@ -23,7 +23,7 @@ class OrderItems extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ExpansionTile(
-      title: Text("₹${formatPrice(data.total)}"),
+      title: Text("₹${data.total}"),
       subtitle: Text(
         formatDate(data.time,
             ['Ordered At ', hh, ":", mm, " ", am, " ", dd, "/", mm, "/", yy]),
@@ -66,7 +66,7 @@ class OrderItems extends StatelessWidget {
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               Text(
-                "₹${formatPrice(data.total)}",
+                "₹${data.total}",
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
             ],

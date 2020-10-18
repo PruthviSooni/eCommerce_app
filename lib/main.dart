@@ -26,6 +26,7 @@ class MyApp extends StatelessWidget {
     final initTheme = isPlatformDark ? darkTheme : lightTheme;
     return MultiProvider(
       providers: [
+
         ChangeNotifierProvider.value(
           value: Auth(),
         ),

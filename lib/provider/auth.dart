@@ -17,14 +17,12 @@ class Auth with ChangeNotifier {
   http.Response res;
   String _email;
   Timer authTimer;
-
   String get email {
     if (_email != null) {
       return _email;
     }
     return 'null';
   }
-
   bool get isAuth {
     return token != null;
   }
@@ -127,5 +125,6 @@ class Auth with ChangeNotifier {
     }
     var timeToLogout = _expire.difference(DateTime.now()).inSeconds;
     authTimer = Timer(Duration(seconds: timeToLogout), logout);
+
   }
 }

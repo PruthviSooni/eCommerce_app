@@ -16,7 +16,6 @@ class Products with ChangeNotifier {
   List<Product> get items {
     return [..._items];
   }
-
   Products(this.token, this.uId, this._items);
 
   List<Product> get favItems {

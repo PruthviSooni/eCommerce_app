@@ -298,7 +298,6 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
       ),
     );
   }
-
   void showPassword() {
     setState(() {
       _isVisible = !_isVisible;

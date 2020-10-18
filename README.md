@@ -1,7 +1,7 @@
 <img src="images/appIcon.png" width=100 align="right" />
 
 # Ecommerce Store [![Awesome](https://cdn.rawgit.com/sindresorhus/awesome/d7305f38d29fed78fa85652e3a63e154dd8e8829/media/badge.svg)]
-> Application using flutter
+> Application using flutter 
 ### Features
 - [Provider State Management](https://pub.dev/packages/provider)  
 - [Firebase Realtime Database API](https://firebase.google.com/docs/reference/rest/database)
@@ -14,3 +14,6 @@
 - Auto Login/Logout Feature
 - Dark/Light Mode
 - Realtime Data
+<>
+### Demo
+<img src="data/demo.gif" height=700 /><img src="data/animation.gif" height=700 align="left"/>

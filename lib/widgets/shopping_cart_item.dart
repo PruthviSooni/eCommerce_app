@@ -40,7 +40,7 @@ class ShoppingCartItems extends StatelessWidget {
                 builder: (ctx) => AlertDialog(
                   title: Text("Are you Sure?"),
                   content:
-                  Text("Do you want to remove the item from the cart!"),
+                      Text("Do you want to remove the item from the cart!"),
                   actions: [
                     FlatButton(
                       onPressed: () {
@@ -104,52 +104,57 @@ class ShoppingCartItems extends StatelessWidget {
                   SizedBox(
                     height: 20,
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      CircleAvatar(
-                        backgroundColor:
-                            ThemeProvider.of(context).backgroundColor,
-                        child: IconButton(
-                          icon: Icon(
-                            Icons.add,
-                            color: Colors.deepOrange,
+                  Expanded(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        CircleAvatar(
+                          backgroundColor:
+                              ThemeProvider.of(context).backgroundColor,
+                          child: IconButton(
+                            padding: EdgeInsets.zero,
+                            icon: Icon(
+                              Icons.add,
+                              color: Colors.deepOrange,
+                            ),
+                            onPressed: () {
+                              Provider.of<Cart>(context, listen: false)
+                                  .addQuantity(productId);
+                            },
                           ),
-                          onPressed: () {
-                            Provider.of<Cart>(context, listen: false)
-                                .addQuantity(productId);
-                          },
                         ),
-                      ),
-                      SizedBox(
-                        width: 8,
-                      ),
-                      Text("$quantity x"),
-                      SizedBox(
-                        width: 8,
-                      ),
-                      quantity == 1
-                          ? Container(
-                        width: 40,
-                      )
-                          : CircleAvatar(
-                        backgroundColor:
-                        ThemeProvider
-                            .of(context)
-                            .backgroundColor,
-                        child: IconButton(
-                          icon: Icon(
-                            Icons.remove,
-                            color: Colors.deepOrange,
-                          ),
-                          onPressed: () {
-                            Provider.of<Cart>(context, listen: false)
-                                .removeQuantity(productId);
-                          },
+                        SizedBox(
+                          width: 8,
                         ),
-                      ),
-                    ],
-                  )
+                        Text("$quantity x"),
+                        SizedBox(
+                          width: 8,
+                        ),
+                        quantity == 1
+                            ? Container(
+                                width: 40,
+                              )
+                            : CircleAvatar(
+                                backgroundColor:
+                                    ThemeProvider.of(context).backgroundColor,
+                                child: IconButton(
+                                  padding: EdgeInsets.zero,
+                                  icon: Icon(
+                                    Icons.remove,
+                                    color: Colors.deepOrange,
+                                  ),
+                                  onPressed: () {
+                                    Provider.of<Cart>(context, listen: false)
+                                        .removeQuantity(productId);
+                                  },
+                                ),
+                              ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    height: 8,
+                  ),
                 ],
               ),
             )),

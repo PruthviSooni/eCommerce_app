@@ -12,5 +12,6 @@
         "multiline",
         "vsync"
     ],
-    "editor.acceptSuggestionOnEnter": "smart"
+    "editor.acceptSuggestionOnEnter": "smart",
+    "dart.flutterSdkPath": "C:\\flutter_sdk\\flutter_windows_1.22.6-stable"
 }

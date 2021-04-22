@@ -266,37 +266,40 @@ class _AddProductScreenState extends State<AddProductScreen> {
                           ),
                         )),
             ),
-            Container(
-              width: 230,
-              margin: EdgeInsets.only(bottom: 5),
-              child: TextFormField(
-                  controller: _imgUrlController,
-                  maxLines: _imgUrlController.text.length > 20 ? 4 : 1,
-                  textInputAction: TextInputAction.done,
-                  decoration:
-                      kTextFieldDecoration.copyWith(labelText: "Image Path"),
-                  // ignore: missing_return
-                  validator: (value) {
-                    bool url = isURL(value);
-                    if (url == false) {
-                      return "Please enter valid url";
-                    } else {
-                      setState(() {
-                        imgUrl = value;
-                      });
-                    }
-                  },
-                  onEditingComplete: _saveForm,
-                  onSaved: (newValue) {
-                    _editingFields = Product(
-                      imageUrl: newValue,
-                      title: _editingFields.title,
-                      description: _editingFields.description,
-                      price: _editingFields.price,
-                      id: _editingFields.id,
-                      isFavorite: _editingFields.isFavorite,
-                    );
-                  }),
+            SizedBox(width: 10),
+            Expanded(
+              child: Container(
+                width: 230,
+                margin: EdgeInsets.only(bottom: 5),
+                child: TextFormField(
+                    controller: _imgUrlController,
+                    maxLines: _imgUrlController.text.length > 20 ? 4 : 1,
+                    textInputAction: TextInputAction.done,
+                    decoration:
+                        kTextFieldDecoration.copyWith(labelText: "Image Path"),
+                    // ignore: missing_return
+                    validator: (value) {
+                      bool url = isURL(value);
+                      if (url == false) {
+                        return "Please enter valid url";
+                      } else {
+                        setState(() {
+                          imgUrl = value;
+                        });
+                      }
+                    },
+                    onEditingComplete: _saveForm,
+                    onSaved: (newValue) {
+                      _editingFields = Product(
+                        imageUrl: newValue,
+                        title: _editingFields.title,
+                        description: _editingFields.description,
+                        price: _editingFields.price,
+                        id: _editingFields.id,
+                        isFavorite: _editingFields.isFavorite,
+                      );
+                    }),
+              ),
             ),
           ],
         ),
